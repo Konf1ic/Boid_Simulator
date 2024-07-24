@@ -238,7 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boids: {fileID: 11400000, guid: 64c18d0bc878bc94785074ce171ebe2e, type: 2}
   boidPrefab: {fileID: 1715043200160518477, guid: 84f30b31603061144944f8e52519ce9e, type: 3}
-  boidCount: 50
+  boidCount: 80
 --- !u!4 &1478180696
 Transform:
   m_ObjectHideFlags: 0

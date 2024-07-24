@@ -22,8 +22,9 @@ public class BoidMovement : MonoBehaviour {
     private Vector2 CalculateVelocity() {
         var boidsInRage = BoidsInRage();
         Vector2 velocity = ((Vector2)transform.forward 
-            + Separation(boidsInRage)
-            + Aligment(boidsInRage)
+            + 1.7f * Separation(boidsInRage)
+            + 0.1f * Aligment(boidsInRage)
+            + Cohetion(boidsInRage)
             ).normalized * forwardSpeed;
         return velocity;
     }
@@ -73,6 +74,18 @@ public class BoidMovement : MonoBehaviour {
         if (boidMovements.Count != 0) direction /= boidMovements.Count;
         else direction = Velocity;
         
+        return direction.normalized;
+    }
+    // Cohesion function
+    private Vector2 Cohetion(List<BoidMovement> boidMovements) {
+        Vector2 direction;
+        Vector2 center = Vector2.zero;
+        foreach(var boid in boidMovements) center += (Vector2)boid.transform.position;
+
+        if(boidMovements.Count != 0) center /= boidMovements.Count;
+        else center = transform.position;
+
+        direction = center - (Vector2)transform.position;
         return direction.normalized;
     }
 }
