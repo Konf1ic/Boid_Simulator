@@ -21,7 +21,10 @@ public class BoidMovement : MonoBehaviour {
 
     private Vector2 CalculateVelocity() {
         var boidsInRage = BoidsInRage();
-        Vector2 velocity = ((Vector2)transform.forward + Separation(boidsInRage)).normalized * forwardSpeed;
+        Vector2 velocity = ((Vector2)transform.forward 
+            + Separation(boidsInRage)
+            + Aligment(boidsInRage)
+            ).normalized * forwardSpeed;
         return velocity;
     }
 
@@ -53,7 +56,7 @@ public class BoidMovement : MonoBehaviour {
             Gizmos.DrawLine(transform.position, boid.transform.position);
         }
     }
-
+    // Separation function
     private Vector2 Separation(List<BoidMovement> boidMovements) { 
         Vector2 diretion = Vector2.zero;
         foreach (var boid in boidMovements) {
@@ -61,5 +64,15 @@ public class BoidMovement : MonoBehaviour {
             diretion -= ratio * (Vector2)(boid.transform.position - transform.position);
         }
         return diretion.normalized;
+    }
+    // Aligment function
+    private Vector2 Aligment(List<BoidMovement> boidMovements) {
+        Vector2 direction = Vector2.zero;
+        foreach(var boid in boidMovements) direction += (Vector2)boid.Velocity;
+
+        if (boidMovements.Count != 0) direction /= boidMovements.Count;
+        else direction = Velocity;
+        
+        return direction.normalized;
     }
 }
