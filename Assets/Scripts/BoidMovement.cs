@@ -8,11 +8,12 @@ public class BoidMovement : MonoBehaviour {
     private float radius = 2f;
     private float forwardSpeed = 5f;
     private float visionAngle = 270f;
+    private float turnSpeed = 10f;
     public Vector3 Velocity { get; private set; }
 
     private void FixedUpdate() {
         // Cập nhật Velocity theo hướng di chuyển
-        Velocity = Vector2.Lerp(Velocity, CalculateVelocity(), Time.fixedDeltaTime);
+        Velocity = Vector2.Lerp(Velocity, CalculateVelocity(),turnSpeed / 2 * Time.fixedDeltaTime);
         // Tính toán cập nhật vị trí mới dựa theo vận tốc
         transform.position += Velocity * Time.fixedDeltaTime;
         LookRotation();
@@ -25,7 +26,7 @@ public class BoidMovement : MonoBehaviour {
     }
 
     private void LookRotation() {
-        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(Velocity), Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(Velocity),turnSpeed * Time.fixedDeltaTime);
     }
 
     private List<BoidMovement> BoidsInRage() {
