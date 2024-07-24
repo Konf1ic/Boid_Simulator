@@ -1,2 +1,2 @@
 # Boid_Simulator
-A Flocking simulation make in Unity
+A Boid Flocking simulation make in Unity
