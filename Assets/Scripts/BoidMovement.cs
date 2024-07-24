@@ -8,18 +8,24 @@ public class BoidMovement : MonoBehaviour {
     private float radius = 2f;
     private float forwardSpeed = 5f;
     private float visionAngle = 270f;
-    public Vector3 Verlocity { get; private set; }
+    public Vector3 Velocity { get; private set; }
 
     private void FixedUpdate() {
-        // Cập nhật Verlocity theo hướng di chuyển
-        Verlocity = Vector2.Lerp(Verlocity, transform.forward.normalized * forwardSpeed, Time.fixedDeltaTime);
+        // Cập nhật Velocity theo hướng di chuyển
+        Velocity = Vector2.Lerp(Velocity, CalculateVelocity(), Time.fixedDeltaTime);
         // Tính toán cập nhật vị trí mới dựa theo vận tốc
-        transform.position += Verlocity * Time.fixedDeltaTime;
+        transform.position += Velocity * Time.fixedDeltaTime;
         LookRotation();
     }
 
+    private Vector2 CalculateVelocity() {
+        var boidsInRage = BoidsInRage();
+        Vector2 velocity = ((Vector2)transform.forward + Separation(boidsInRage)).normalized * forwardSpeed;
+        return velocity;
+    }
+
     private void LookRotation() {
-        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(Verlocity), Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(Velocity), Time.fixedDeltaTime);
     }
 
     private List<BoidMovement> BoidsInRage() {
@@ -47,5 +53,12 @@ public class BoidMovement : MonoBehaviour {
         }
     }
 
-
+    private Vector2 Separation(List<BoidMovement> boidMovements) { 
+        Vector2 diretion = Vector2.zero;
+        foreach (var boid in boidMovements) {
+            float ratio = Mathf.Clamp01((boid.transform.position - transform.position).magnitude / radius);
+            diretion -= ratio * (Vector2)(boid.transform.position - transform.position);
+        }
+        return diretion.normalized;
+    }
 }
